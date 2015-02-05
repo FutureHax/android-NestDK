@@ -320,9 +320,9 @@ public final class NestAPI implements ValueEventListener {
 
     @SuppressWarnings("unchecked")
     private static void updateStructures(Map<String, Object> structures, List<Listener> listeners) {
+        ArrayList<Structure> structuresList = new ArrayList<>();
         for (Map.Entry<String, Object> entry : structures.entrySet()) {
-            final Map<String, Object> value = (Map<String, Object>) entry.getValue();
-            final Structure structure = new Structure.Builder().fromMap(value);
+            Structure structure = new Structure.Builder().fromMap((Map<String, Object>) entry.getValue());
 
             if (structure != null) {
                 for (Listener listener : listeners) {
@@ -330,6 +330,13 @@ public final class NestAPI implements ValueEventListener {
                         listener.getStructureListener().onStructureUpdated(structure);
                     }
                 }
+                structuresList.add(structure);
+            }
+        }
+
+        for (Listener listener : listeners) {
+            if (listener.getStructuresListener() != null) {
+                listener.getStructuresListener().onStructuresUpdated(structuresList);
             }
         }
     }
