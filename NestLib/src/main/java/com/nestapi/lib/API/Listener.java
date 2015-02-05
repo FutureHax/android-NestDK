@@ -10,6 +10,8 @@
  */
 package com.nestapi.lib.API;
 
+import java.util.ArrayList;
+
 /**
  * This class is used to build a collection of data listeners for updates
  * to user data (devices and structure details).
@@ -17,11 +19,13 @@ package com.nestapi.lib.API;
 public final class Listener {
     private final ThermostatListener mThermostatListener;
     private final StructureListener mStructureListener;
+    private final StructuresListener mStructuresListener;
     private final SmokeCOAlarmListener mSmokeCOAlarmListener;
 
     private Listener(Builder builder) {
         mThermostatListener = builder.mThermostatListener;
         mStructureListener = builder.mStructureListener;
+        mStructuresListener = builder.mStructuresListener;
         mSmokeCOAlarmListener = builder.mSmokeCOAlarmListener;
     }
 
@@ -29,6 +33,9 @@ public final class Listener {
         return mThermostatListener;
     }
 
+    StructuresListener getStructuresListener() {
+        return mStructuresListener;
+    }
     StructureListener getStructureListener() {
         return mStructureListener;
     }
@@ -40,6 +47,7 @@ public final class Listener {
     public static class Builder {
         private ThermostatListener mThermostatListener = null;
         private StructureListener mStructureListener = null;
+        private StructuresListener mStructuresListener = null;
         private SmokeCOAlarmListener mSmokeCOAlarmListener = null;
 
         public Builder setThermostatListener(ThermostatListener listener) {
@@ -49,6 +57,11 @@ public final class Listener {
 
         public Builder setStructureListener(StructureListener listener) {
             mStructureListener = listener;
+            return this;
+        }
+
+        public Builder setStructuresListener(StructuresListener listener) {
+            mStructuresListener = listener;
             return this;
         }
 
@@ -78,6 +91,15 @@ public final class Listener {
          *                  to be non-null)
          */
         void onStructureUpdated(Structure structure);
+    }
+
+    public interface StructuresListener {
+        /**
+         * Called when updated data is retrieved for a user's structure.
+         * @param structures the new data for the structure (guaranteed
+         *                  to be non-null)
+         */
+        void onStructuresUpdated(ArrayList<Structure> structures);
     }
 
     public interface SmokeCOAlarmListener {
